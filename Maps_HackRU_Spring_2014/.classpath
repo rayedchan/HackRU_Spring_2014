@@ -2,5 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.launching.macosx.MacOSXType/jdk1.7.0_51"/>
+	<classpathentry kind="lib" path="/Users/rayedchan/Desktop/HackRU_Spring_2014/lib/json-lib-2.4-jdk15.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

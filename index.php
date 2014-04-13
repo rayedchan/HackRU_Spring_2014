@@ -2,6 +2,15 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+        <style type="text/css">
+          html { height: 100% }
+          body { height: 100%; margin: 0; padding: 0 }
+          #map-canvas { height: 100% }
+        </style>
+        <script type="text/javascript"
+          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBnDgFGCzZLZwBCl4r45NKW8ylutfW93rM&sensor=false">
+        </script>
         <script language="javascript" type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
         <script language="javascript" type="text/javascript" src="js/httpGet.js"></script>
         <script language="javascript" type="text/javascript" src="js/xmlToJSON.js"></script>
@@ -38,40 +47,67 @@
                 // console.log(json['route']);
                 // console.log(json['route'][0]['path'][0]['point']);
                 
-                
-                var geometry = {};
-                
+                var pathLine = {};
+                var features = [];
+ 
                 // Construct an entire route by connecting all the given paths 
                 var route = json['route'][0]['path'];                  
-                var coordinates = []; // Add all the coordinates in a given route
-                var pointPairCount = 0; // Index counter for all coordinates
                 
+                // Iterate each path in a given route
                 for(var j = 0; j < route.length; j++)
-                {
-                    // Build list of coordinates for a single path
-                    var path = route[j]['point'];
+                {    
+                    var path = route[j]['point']; // Single path in a given route
+                    var featureInst = {}; // Wrap type and geometry
+                    var geometry = {}; // Wrap type and coordinates
+                    var coordinates = []; // Add all coordinates in a given path
                     
                     // Iterate each point within a path
                     for(var i = 0; i < path.length; i++)
                     {
                         var lat = path[i]['lat'];
                         var lon = path[i]['lon'];
-                        var point = [Number(lat), Number(lon)];
-                        coordinates[pointPairCount++] = point;
+                        var point = [Number(lon), Number(lat)]; // GeoJson Google Parser: Lon , Lat
+                        coordinates[i] = point;
                     }
+                                    
+                    geometry['type'] = "LineString";
+                    geometry['coordinates'] = coordinates; // Wrap coordinates within geometry object
+                
+                    featureInst['type'] = "Feature";
+                    featureInst['geometry'] = geometry;
+                    
+                    features.push(featureInst); // Add item to end of array
                 }
+
+                pathLine['type'] = "FeatureCollection";
+                pathLine['features'] = features;
+
+                //console.log(coordinates.length);
+                console.log(pathLine);
+                console.log(JSON.stringify(pathLine));
                 
-                geometry['type'] = "LineString";
-                geometry['coordinates'] = coordinates; // Wrap coordinates within geometry object
-                
-                console.log(coordinates.length);
-                console.log(coordinates);
-                console.log(JSON.stringify(geometry));
+                // Google Map
+                 function initialize() 
+                 {
+                        var mapOptions = {
+                          center: new google.maps.LatLng(40.49957, -74.44824),
+                          zoom: 18
+                        };
+                        var map = new google.maps.Map(document.getElementById("map-canvas"),
+                            mapOptions);
+
+                                
+                        //Load a GeoJSON from the same server as our demo.
+                        map.data.loadGeoJson('json/samplePath.json');
+
+                      }
+
+		google.maps.event.addDomListener(window, 'load', initialize); 
             });
             
         </script>
     </head>
     <body>
-        
+         <div id="map-canvas"/>
     </body>
 </html>

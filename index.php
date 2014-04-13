@@ -73,12 +73,17 @@
                     geometry['type'] = "LineString";
                     geometry['coordinates'] = coordinates; // Wrap coordinates within geometry object
                 
+                    // Create properties for feature instance
+                    var properties = {};
+                    properties['color'] = "red";
+                
                     featureInst['type'] = "Feature";
+                    featureInst['properties'] = properties;
                     featureInst['geometry'] = geometry;
                     
                     features.push(featureInst); // Add item to end of array
                 }
-
+                
                 pathLine['type'] = "FeatureCollection";
                 pathLine['features'] = features;
 
@@ -87,22 +92,37 @@
                 console.log(JSON.stringify(pathLine));
                 
                 // Google Map
-                 function initialize() 
-                 {
-                        var mapOptions = {
-                          center: new google.maps.LatLng(40.49957, -74.44824),
-                          zoom: 18
+                function initialize() 
+                {
+                    var mapOptions = {
+                      center: new google.maps.LatLng(40.49957, -74.44824),
+                      zoom: 18
+                    };
+                    var map = new google.maps.Map(document.getElementById("map-canvas"),
+                        mapOptions);
+                        
+                    // Fixed line color                     
+                    /*var featureStyle = {
+                        strokeColor: 'red',
+                        strokeWeight: 1
+                    }
+                    map.data.setStyle(featureStyle);*/
+                
+                
+                     map.data.setStyle(function(feature) 
+                     {
+                        return {
+                          strokeColor: feature.getProperty('color'),
+                          strokeWeight: 1
                         };
-                        var map = new google.maps.Map(document.getElementById("map-canvas"),
-                            mapOptions);
+                     });
 
-                                
-                        //Load a GeoJSON from the same server as our demo.
-                        map.data.loadGeoJson('json/samplePath.json');
 
-                      }
+                    //Load a GeoJSON from the same server as our demo.
+                    map.data.loadGeoJson('json/samplePath.json');
+                }
 
-		google.maps.event.addDomListener(window, 'load', initialize); 
+		google.maps.event.addDomListener(window, 'load', initialize);   
             });
             
         </script>

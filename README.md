@@ -2,8 +2,8 @@ HackRU_Spring_2014
 ==================
 This github project was developed during the 'HackRU Spring 2014' event at Rutgers University by Ray Chan and Daniel Stroh.
 
-In this prof of concept is implemented a web application that provides an interactive map of the campus of Rutgers University.
-The map makes extensive use of the Google Maps API. The underlying map data is customized and on top are placed bus routes. Data about the bus routes is retrieved through the Netbus public API. Calls to that API return data in XML format. This XML data is converted within the web application into GeoJSON format. This data can be imported into Google Maps API and rendered as bus routes. The web application is developed using PHP and Javascript, as of now no database is needed in the backend.
+This web application prof of concept provides an interactive map of the campus of Rutgers University.
+The map makes extensive use of the Google Maps API. The underlying map data is customized and on top are placed bus routes. Data about the bus routes is retrieved through the Nextbus public API. Calls to that API return data in XML format. This XML data is converted within the web application into GeoJSON format. This data can be imported into Google Maps API and rendered as bus routes. The web application is developed using Javascript, as of now no database is needed in the backend.
 
 This web application holds a lot of possibilities for further development.
 * The current bus routes will be updated to provide information on current bus position tracking. 

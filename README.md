@@ -8,7 +8,9 @@ The map makes extensive use of the Google Maps API. The underlying map data is c
 This web application holds a lot of possibilities for further development.
 * The current bus routes will updated to provide information on current bus position tracking. 
 * It is planned to offer update on parking lot status, i.e. closure, event parking and so on.
-* The map abilities will be extended to offer search functionalities, i.e. it will be possible to search events and locations; and social interaction, i.e. People can comment on dining hall food and can rate new book releases at Barnes & Nobles store and share their latest HackRU experiences.
+* The map abilities will be extended to offer:
+  * search functionalities, i.e. it will be possible to search events and locations; and 
+  * social interaction, i.e. People can rate dining hall food and share their latest HackRU experiences.
 * Transfer the map to mobile devices.
 * Guarantee modularity in such an amount that the web application can be used for other  underlying data, i.e. other university maps or other scenarios like a map for a mall or an amusement park.
 

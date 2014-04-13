@@ -21,6 +21,9 @@
             
             $(document).ready(function()
             {
+                var route_colors = ["#FF0000", "#00FF00", "#0000FF", "#FF3300", "#00FF33", "#3300FF", "#FF0033", "#33FF00", "#FF3333", "#33FF33", "#3333FF", "#FFCC00", "#00FFCC", "#CC00F"];
+                
+                
                 // Uses API from Rutgers to get bus routes; Gets String representation of XML 
                 var xmlBusRoutesRequest = httpGet("http://webservices.nextbus.com/service/publicXMLFeed?a=rutgers&command=routeConfig");
                 //console.log(xmlBusRoutesRequest);
@@ -49,39 +52,44 @@
                 
                 var pathLine = {};
                 var features = [];
+                var buses = json['route']; 
  
-                // Construct an entire route by connecting all the given paths 
-                var route = json['route'][0]['path'];                  
-                
-                // Iterate each path in a given route
-                for(var j = 0; j < route.length; j++)
-                {    
-                    var path = route[j]['point']; // Single path in a given route
-                    var featureInst = {}; // Wrap type and geometry
-                    var geometry = {}; // Wrap type and coordinates
-                    var coordinates = []; // Add all coordinates in a given path
-                    
-                    // Iterate each point within a path
-                    for(var i = 0; i < path.length; i++)
-                    {
-                        var lat = path[i]['lat'];
-                        var lon = path[i]['lon'];
-                        var point = [Number(lon), Number(lat)]; // GeoJson Google Parser: Lon , Lat
-                        coordinates[i] = point;
+                // Iterate each bus route
+                for(var z = 0; z < buses.length; z++)
+                {
+                    // Construct an entire bus route by connecting all the given paths 
+                    var route = buses[z]['path'];                  
+
+                    // Iterate each path in a given route
+                    for(var j = 0; j < route.length; j++)
+                    {    
+                        var path = route[j]['point']; // Single path in a given route
+                        var featureInst = {}; // Wrap type and geometry
+                        var geometry = {}; // Wrap type and coordinates
+                        var coordinates = []; // Add all coordinates in a given path
+
+                        // Iterate each point within a path
+                        for(var i = 0; i < path.length; i++)
+                        {
+                            var lat = path[i]['lat'];
+                            var lon = path[i]['lon'];
+                            var point = [Number(lon), Number(lat)]; // GeoJson Google Parser: Lon , Lat
+                            coordinates[i] = point;
+                        }
+                        
+                        geometry['type'] = "LineString";
+                        geometry['coordinates'] = coordinates; // Wrap coordinates within geometry object
+
+                        // Create properties for feature instance
+                        var properties = {};
+                        properties['color'] = route_colors[z];
+
+                        featureInst['type'] = "Feature";
+                        featureInst['properties'] = properties;
+                        featureInst['geometry'] = geometry;
+
+                        features.push(featureInst); // Add item to end of array
                     }
-                                    
-                    geometry['type'] = "LineString";
-                    geometry['coordinates'] = coordinates; // Wrap coordinates within geometry object
-                
-                    // Create properties for feature instance
-                    var properties = {};
-                    properties['color'] = "red";
-                
-                    featureInst['type'] = "Feature";
-                    featureInst['properties'] = properties;
-                    featureInst['geometry'] = geometry;
-                    
-                    features.push(featureInst); // Add item to end of array
                 }
                 
                 pathLine['type'] = "FeatureCollection";
@@ -108,7 +116,7 @@
                     }
                     map.data.setStyle(featureStyle);*/
                 
-                
+                    // Dyanamically assign colors for each line
                      map.data.setStyle(function(feature) 
                      {
                         return {
@@ -116,7 +124,6 @@
                           strokeWeight: 1
                         };
                      });
-
 
                     //Load a GeoJSON from the same server as our demo.
                     map.data.loadGeoJson('json/samplePath.json');

@@ -61,7 +61,9 @@
                     }
                 }
                 
+                geometry['type'] = "LineString";
                 geometry['coordinates'] = coordinates; // Wrap coordinates within geometry object
+                
                 console.log(coordinates.length);
                 console.log(coordinates);
                 console.log(JSON.stringify(geometry));

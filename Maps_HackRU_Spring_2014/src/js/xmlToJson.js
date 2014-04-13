@@ -1,4 +1,4 @@
-xmlToJson = function(xml) {
+var xmlToJson = function(xml) {
     var obj = {};
     if (xml.nodeType == 1) {                
         if (xml.attributes.length > 0) {
